@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لعبة الروجي</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+            padding: 50px;
+            transition: background-color 0.5s;
+        }
+        h1 {
+            color: #333;
+        }
+        .choices {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #result {
+            margin-top: 30px;
+            font-size: 20px;
+            color: #333;
+        }
+        .video-container {
+            margin-top: 30px;
+        }
+        video {
+            width: 100%;
+            max-width: 600px;
+            border-radius: 10px;
+        }
+        .red-screen {
+            background-color: red;
+            color: white;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 30px;
+            font-weight: bold;
+            flex-direction: column;
+        }
+        .hidden {
+            display: none;
+        }
+        #restartButton {
+            margin-top: 20px;
+            background-color: #008CBA;
+        }
+    </style>
+</head>
+<body>
+    <h1>نبانلك خداع الروجي ؟</h1>
+    <p>قول ياروجي</p>
+
+    <!-- زر تشغيل الصوت -->
+    <button id="unmuteButton">تشغيل الصوت</button>
+
+    <!-- الفيديو الأول (يظهر تحت السؤال) -->
+    <div class="video-container">
+        <video id="introVideo">
+            <source src="intro-video.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+
+    <div class="choices">
+        <button id="yesBtn">نعم</button>
+        <button id="noBtn">لا</button>
+    </div>
+    <div id="result"></div>
+
+    <!-- الفيديو الثاني (يظهر عند اختيار "لا") -->
+    <div id="secondVideoContainer" class="video-container hidden">
+        <video id="secondVideo" controls>
+            <source src="second-video.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+
+    <!-- زر إعادة اللعب -->
+    <button id="restartButton" class="hidden">إعادة اللعب</button>
+
+    <script>
+        // العناصر
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const resultDiv = document.getElementById('result');
+        const secondVideoContainer = document.getElementById('secondVideoContainer');
+        const secondVideo = document.getElementById('secondVideo');
+        const introVideo = document.getElementById('introVideo');
+        const restartButton = document.getElementById('restartButton');
+        const unmuteButton = document.getElementById('unmuteButton');
+
+        // تأخير تشغيل الفيديو الأول بمقدار ثانية واحدة
+        setTimeout(() => {
+            introVideo.play();
+        }, 1000); // 1000 مللي ثانية = 1 ثانية
+
+        // حدث تشغيل الصوت
+        unmuteButton.addEventListener('click', () => {
+            introVideo.muted = false;
+            introVideo.play();
+        });
+
+        // أحداث النقر
+        yesBtn.addEventListener('click', () => {
+            // تحول الشاشة إلى اللون الأحمر
+            document.body.classList.add('red-screen');
+            resultDiv.textContent = 'لقد مت أيها الروجي';
+            resultDiv.style.color = 'white';
+
+            // إخفاء الأزرار والفيديو الأول
+            document.querySelector('.choices').classList.add('hidden');
+            document.querySelector('.video-container').classList.add('hidden');
+
+            // إظهار زر إعادة اللعب
+            restartButton.classList.remove('hidden');
+        });
+
+        noBtn.addEventListener('click', () => {
+            // إخفاء الفيديو الأول وإظهار الفيديو الثاني
+            document.querySelector('.video-container').classList.add('hidden');
+            secondVideoContainer.classList.remove('hidden');
+            secondVideo.play();
+
+            resultDiv.textContent = 'لعزيييز';
+            resultDiv.style.color = '#4CAF50';
+        });
+
+        // إخفاء الفيديو الثاني بعد انتهاء التشغيل وإظهار زر إعادة اللعب
+        secondVideo.addEventListener('ended', () => {
+            secondVideoContainer.classList.add('hidden');
+            restartButton.classList.remove('hidden');
+        });
+
+        // إعادة تشغيل اللعبة
+        restartButton.addEventListener('click', () => {
+            // إعادة تعيين كل شيء إلى الحالة الأصلية
+            document.body.classList.remove('red-screen');
+            document.querySelector('.choices').classList.remove('hidden');
+            document.querySelector('.video-container').classList.remove('hidden');
+            secondVideoContainer.classList.add('hidden');
+            restartButton.classList.add('hidden');
+            resultDiv.textContent = '';
+            introVideo.currentTime = 0; // إعادة تشغيل الفيديو الأول من البداية
+            introVideo.play();
+        });
+    </script>
+</body>
+</html>
