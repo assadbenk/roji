@@ -65,18 +65,31 @@
             margin-top: 20px;
             background-color: #008CBA;
         }
+        .social-links {
+            margin-top: 50px;
+            font-size: 18px;
+        }
+        .social-links a {
+            color: #4CAF50;
+            text-decoration: none;
+            margin: 0 10px;
+            transition: color 0.3s;
+        }
+        .social-links a:hover {
+            color: #45a049;
+        }
     </style>
 </head>
 <body>
     <h1>نبانلك خداع الروجي ؟</h1>
     <p>قول ياروجي</p>
 
-    <!-- زر تشغيل الصوت -->
+    
     <button id="unmuteButton">تشغيل الصوت</button>
 
-    <!-- الفيديو الأول (يظهر تحت السؤال) -->
+    
     <div class="video-container">
-        <video id="introVideo">
+        <video id="introVideo" muted>
             <source src="intro-video.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
@@ -88,7 +101,7 @@
     </div>
     <div id="result"></div>
 
-    <!-- الفيديو الثاني (يظهر عند اختيار "لا") -->
+    
     <div id="secondVideoContainer" class="video-container hidden">
         <video id="secondVideo" controls>
             <source src="second-video.mp4" type="video/mp4">
@@ -96,8 +109,16 @@
         </video>
     </div>
 
-    <!-- زر إعادة اللعب -->
+    
     <button id="restartButton" class="hidden">إعادة اللعب</button>
+
+    
+    <div class="social-links">
+        <p>ياخو خسارة عليك انا نتعب على جالك اهبط دير ابوني هنا:</p>
+        <a href="https://www.instagram.com/assad_benkheira/" target="_blank">إنستقرام</a>
+        <a href="https://www.tiktok.com/@mr.alex.officially" target="_blank">تيك توك</a>
+        <p>درت خو ؟ لعزيييييييييييييييييييييييييز</p>
+    </div>
 
     <script>
         // العناصر
@@ -110,34 +131,35 @@
         const restartButton = document.getElementById('restartButton');
         const unmuteButton = document.getElementById('unmuteButton');
 
-        // تأخير تشغيل الفيديو الأول بمقدار ثانية واحدة
+        
         setTimeout(() => {
             introVideo.play();
         }, 1000); // 1000 مللي ثانية = 1 ثانية
 
-        // حدث تشغيل الصوت
+        
         unmuteButton.addEventListener('click', () => {
             introVideo.muted = false;
             introVideo.play();
+            unmuteButton.classList.add('hidden'); 
         });
 
-        // أحداث النقر
+        
         yesBtn.addEventListener('click', () => {
-            // تحول الشاشة إلى اللون الأحمر
+           
             document.body.classList.add('red-screen');
             resultDiv.textContent = 'لقد مت أيها الروجي';
             resultDiv.style.color = 'white';
 
-            // إخفاء الأزرار والفيديو الأول
+           
             document.querySelector('.choices').classList.add('hidden');
             document.querySelector('.video-container').classList.add('hidden');
 
-            // إظهار زر إعادة اللعب
+           
             restartButton.classList.remove('hidden');
         });
 
         noBtn.addEventListener('click', () => {
-            // إخفاء الفيديو الأول وإظهار الفيديو الثاني
+            
             document.querySelector('.video-container').classList.add('hidden');
             secondVideoContainer.classList.remove('hidden');
             secondVideo.play();
@@ -146,23 +168,24 @@
             resultDiv.style.color = '#4CAF50';
         });
 
-        // إخفاء الفيديو الثاني بعد انتهاء التشغيل وإظهار زر إعادة اللعب
+        
         secondVideo.addEventListener('ended', () => {
             secondVideoContainer.classList.add('hidden');
             restartButton.classList.remove('hidden');
         });
 
-        // إعادة تشغيل اللعبة
+        
         restartButton.addEventListener('click', () => {
-            // إعادة تعيين كل شيء إلى الحالة الأصلية
+           
             document.body.classList.remove('red-screen');
             document.querySelector('.choices').classList.remove('hidden');
             document.querySelector('.video-container').classList.remove('hidden');
             secondVideoContainer.classList.add('hidden');
             restartButton.classList.add('hidden');
             resultDiv.textContent = '';
-            introVideo.currentTime = 0; // إعادة تشغيل الفيديو الأول من البداية
+            introVideo.currentTime = 0; 
             introVideo.play();
+            unmuteButton.classList.remove('hidden'); 
         });
     </script>
 </body>
